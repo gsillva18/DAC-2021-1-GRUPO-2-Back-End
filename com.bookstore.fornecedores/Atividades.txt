@@ -1,0 +1,11 @@
+
+- CRUD 
+	- CRUD de fornecedores 
+		- Create 
+		- Read 
+		- Update 
+		- Delete 
+	
+
+
+

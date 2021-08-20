@@ -1,0 +1,12 @@
+- SEMPRE comece a mexer no projeto fazendo o "git pull" pra ficar atualizado com a versão do servidor;
+- NUNCA se esqueça de comitar as atualizações;
+- Escreva mensagens claras nos commits;
+- Sobrescreva o equals e o toString das classes do model;
+- As nomes das tabelas devem seguir uma nomenclatura como "TB_<nome_da_classe_em_caixa_alta>"
+- Os nomes das colunas das tabelas deve estar escrito em caixa alta;
+- Trocar ArrayList por List: com a interface List fica mais flexível;
+- Trocar long, int, boolean e float por Long, Integer, Boolean e Float: o professor recomendou fazer isso;
+- FormaPagamento vira um strategy: o professor disse q tem q ser mais flexível;
+- As relações entre as tabelas de pessoas diferentes ficam pra depois que as pessoas tiverem encerrado com suas classes;
+- Se vc vai mexer no projeto ao msm tempo que outra pessoa, crie uma branch pra vc e dps faça o merge;
+- Não dêem "new" nas classes de service.
