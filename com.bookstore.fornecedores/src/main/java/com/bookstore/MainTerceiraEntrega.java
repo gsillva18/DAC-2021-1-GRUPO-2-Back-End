@@ -26,12 +26,12 @@ public class MainTerceiraEntrega implements CommandLineRunner {
 		//Por padrão, já se mantém o cadastro do administrador do sistema antes de iniciar a aplicação
 		// Email: admin@admin.com
 		// Senha: admin123
-//		try {
-//			facadeUsuarios.cadastrarUsuario("admin", "admin@admin.com", new BCryptPasswordEncoder().encode("admin123") , true);
-//		} catch (Exception e) {
-//			// Exceção lançada após a segunda execução pois ele tentará
-//			// setar o adm novamente com o mesmo email, o que não é permitido.
-//		}
+		try {
+			facadeUsuarios.cadastrarUsuario("admin", "admin@admin.com", new BCryptPasswordEncoder().encode("admin123") , true);
+		} catch (Exception e) {
+			// Exceção lançada após a segunda execução pois ele tentará
+			// setar o adm novamente com o mesmo email, o que não é permitido.
+		}
 		
 		System.out.println("Server is running at port 8080 bookstore fornecedores");
 	}
