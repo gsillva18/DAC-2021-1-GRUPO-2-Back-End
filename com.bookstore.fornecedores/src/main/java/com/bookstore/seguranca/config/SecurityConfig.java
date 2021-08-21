@@ -1,20 +1,33 @@
 package com.bookstore.seguranca.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.bookstore.seguranca.filtro.AuthTokenFilter;
+import com.bookstore.seguranca.util.AuthEntryPointJwt;
 import com.bookstore.service.AutenticacaoService;
 
 /**
  * @author NPG
  *
  */
+@Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+		// securedEnabled = true,
+		// jsr250Enabled = true,
+		prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -29,9 +42,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		System.out.println("Senha 5: " + new BCryptPasswordEncoder().encode("senha567"));
 //	}
 	
+	@Autowired
+	private AuthEntryPointJwt unauthorizedHandler;
+
+	@Bean
+	public AuthTokenFilter authenticationJwtTokenFilter() {
+		return new AuthTokenFilter();
+	}
+	
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http.cors().and().csrf().disable()
+		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+			.authorizeRequests()
 			.antMatchers("/resources/**", "/webjars/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/perfil").hasAuthority("CLIENT")
 			.antMatchers(HttpMethod.GET, "/endereco_form/{id}").hasAuthority("CLIENT")
@@ -52,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, "/livroform/{id}").hasAuthority("ADMIN")
 			.antMatchers(HttpMethod.GET, "/inicio").permitAll()
 			.antMatchers(HttpMethod.GET, "/cadastre-se").permitAll()
+			.antMatchers(HttpMethod.DELETE, "/fornecedor/deletar/{id}").permitAll()
 			.anyRequest().permitAll()
 			.and()
 			
@@ -59,12 +90,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/login")
 			.permitAll()
 			.defaultSuccessUrl("/inicio", true)
-//			.and()
-//			.rememberMe()
 			
 			.and()
 			.csrf().disable()
 			.logout().logoutSuccessUrl("/inicio");
+		
+			http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override
