@@ -33,7 +33,7 @@ public class MainTerceiraEntrega implements CommandLineRunner {
 			// setar o adm novamente com o mesmo email, o que não é permitido.
 		}
 		
-		System.out.println("Server is running at port 8080 bookstore fornecedores");
+		System.out.println("Server is running at port 8082 bookstore fornecedores");
 	}
 	
 }
